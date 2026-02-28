@@ -5,7 +5,7 @@ import { scrapeWork } from '@/lib/scraper';
 import { getTranslator } from '@/lib/translator';
 import { generateEpub } from '@/lib/epub';
 import { extractWorkId, isAO3Url } from '@/lib/utils';
-import type { TranslateRequest } from '@/types';
+import type { TranslateRequest, FanficContent } from '@/types';
 
 const BATCH_SIZE = 30;
 
@@ -177,17 +177,44 @@ async function processTranslation(
         upsert: true,
       });
 
-    // 7. Clean up temp paragraphs file
+    // 7. Save content JSON for the reader
+    const wordCount = translated.join(' ').split(/\s+/).filter(Boolean).length;
+    const contentJson: FanficContent = {
+      chapters: [
+        {
+          title: titleTranslated,
+          content: translated.join('\n'),
+        },
+      ],
+      metadata: {
+        title: titleTranslated,
+        titleOriginal: scraped.title,
+        author: scraped.author,
+        sourceUrl: scraped.url,
+        wordCount,
+      },
+    };
+    const contentPath = `${userId}/${fanficId}_content.json`;
+    await admin.storage
+      .from('epubs')
+      .upload(contentPath, JSON.stringify(contentJson), {
+        contentType: 'application/json',
+        upsert: true,
+      });
+
+    // 8. Clean up temp paragraphs file
     await admin.storage
       .from('epubs')
       .remove([`${userId}/${fanficId}_paragraphs.json`]);
 
-    // 8. Mark as completed
+    // 9. Mark as completed
     await admin
       .from('fanfics')
       .update({
         title_translated: titleTranslated,
         epub_path: epubPath,
+        content_path: contentPath,
+        word_count: wordCount,
         status: 'completed',
         progress: 100,
         translated_paragraphs: scraped.paragraphs.length,

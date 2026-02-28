@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/client';
 import type { Fanfic } from '@/types';
 
 async function loadFanfics(): Promise<Fanfic[]> {
-  const res = await fetch('/api/fanfics');
+  const res = await fetch('/api/fanfics?pageSize=50');
   if (!res.ok) return [];
   const data = await res.json();
   return data.fanfics ?? [];

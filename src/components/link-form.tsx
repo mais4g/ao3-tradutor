@@ -5,23 +5,19 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { isAO3Url } from '@/lib/utils';
+import { LANGUAGES } from '@/lib/constants';
 
 interface LinkFormProps {
   onSubmit: (urls: string[], languageTo: string) => Promise<unknown>;
 }
-
-const LANGUAGES = [
-  { value: 'pt', label: 'Português (BR)' },
-  { value: 'es', label: 'Español' },
-  { value: 'fr', label: 'Français' },
-  { value: 'de', label: 'Deutsch' },
-  { value: 'it', label: 'Italiano' },
-  { value: 'ja', label: '日本語' },
-  { value: 'ko', label: '한국어' },
-  { value: 'zh', label: '中文' },
-  { value: 'ru', label: 'Русский' },
-];
 
 export function LinkForm({ onSubmit }: LinkFormProps) {
   const [links, setLinks] = useState('');
@@ -78,19 +74,19 @@ export function LinkForm({ onSubmit }: LinkFormProps) {
 
       <div className="flex items-end gap-4">
         <div className="space-y-2">
-          <Label htmlFor="language">Traduzir para</Label>
-          <select
-            id="language"
-            value={languageTo}
-            onChange={(e) => setLanguageTo(e.target.value)}
-            className="flex h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-          >
-            {LANGUAGES.map((lang) => (
-              <option key={lang.value} value={lang.value}>
-                {lang.label}
-              </option>
-            ))}
-          </select>
+          <Label>Traduzir para</Label>
+          <Select value={languageTo} onValueChange={setLanguageTo}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {LANGUAGES.map((lang) => (
+                <SelectItem key={lang.value} value={lang.value}>
+                  {lang.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         <Button type="submit" disabled={loading || !links.trim()}>

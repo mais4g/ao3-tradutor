@@ -124,3 +124,51 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Reader themes */
+[data-reader-theme="light"] {
+  --reader-bg: #ffffff;
+  --reader-text: #1a1a2e;
+  --reader-muted: #6b7280;
+  --reader-border: #e5e7eb;
+}
+
+[data-reader-theme="dark"] {
+  --reader-bg: #1a1a2e;
+  --reader-text: #e2e2e8;
+  --reader-muted: #9ca3af;
+  --reader-border: rgba(255, 255, 255, 0.1);
+}
+
+[data-reader-theme="sepia"] {
+  --reader-bg: #f5f0e8;
+  --reader-text: #3b3228;
+  --reader-muted: #7a6e5f;
+  --reader-border: #d4c9b8;
+}
+
+.reader-content {
+  background-color: var(--reader-bg);
+  color: var(--reader-text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.reader-content .prose {
+  color: var(--reader-text);
+}
+
+.reader-content .prose p {
+  margin-bottom: 1.25em;
+  line-height: 1.8;
+}
+
+.reader-content .prose h2 {
+  color: var(--reader-text);
+  margin-top: 2em;
+  margin-bottom: 1em;
+}
+
+/* Reader font family — literary feel */
+.reader-content .prose {
+  font-family: Georgia, 'Times New Roman', serif;
+}
