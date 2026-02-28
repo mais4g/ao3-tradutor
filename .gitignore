@@ -37,6 +37,9 @@ yarn-error.log*
 # keep .env.example
 !.env.example
 
+# plan file
+PLAN.md
+
 # legacy python project
 _legacy/
 

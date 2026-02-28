@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+import { BookOpenText } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
@@ -77,13 +79,21 @@ export function FanficCard({ fanfic, onDownload, onDelete }: FanficCardProps) {
             </a>
           </Button>
           {isCompleted && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => onDownload(fanfic.id)}
-            >
-              Download
-            </Button>
+            <>
+              <Button variant="outline" size="sm" asChild>
+                <Link href={`/fanfic/${fanfic.id}`}>
+                  <BookOpenText className="mr-1 h-3 w-3" />
+                  Ler
+                </Link>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => onDownload(fanfic.id)}
+              >
+                Download
+              </Button>
+            </>
           )}
           <Button
             variant="ghost"
