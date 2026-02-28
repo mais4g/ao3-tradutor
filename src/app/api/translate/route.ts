@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, after } from 'next/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { createClient } from '@/lib/supabase/server';
 import { scrapeWork } from '@/lib/scraper';
@@ -81,8 +81,10 @@ export async function POST(request: Request) {
 
     results.push({ url, fanficId: fanfic.id });
 
-    // Start translation in background (fire & forget)
-    processTranslation(fanfic.id, url, languageTo, user.id).catch(() => {});
+    // Run translation after response is sent (works on both Vercel and local)
+    after(
+      processTranslation(fanfic.id, url, languageTo, user.id),
+    );
   }
 
   return NextResponse.json({ results });

@@ -13,7 +13,7 @@ export async function scrapeWork(url: string): Promise<ScrapedFanfic> {
     throw new Error(`URL inválida: não foi possível extrair work ID de "${url}"`);
   }
 
-  const fullUrl = `https://archiveofourown.org/works/${workId}?view_full_work=true`;
+  const fullUrl = `https://archiveofourown.org/works/${workId}?view_full_work=true&view_adult=true`;
 
   const response = await fetch(fullUrl, {
     headers: { 'User-Agent': USER_AGENT },
